@@ -53,9 +53,9 @@ class hot_push:
             time.sleep(n)
             # ------------------下翻几页---------------------
             # 翻出阅读更多的按钮
-            for count_fanye in range(3):
+            for count_fanye in range(1):
                 self.dr.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-                time.sleep(1)
+                time.sleep(n)
             # # 点击阅读更多
             # for j in range(3):
             #     try:
