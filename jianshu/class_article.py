@@ -90,6 +90,7 @@ class article:
                         try:
                             self.dr.find_element_by_link_text('喜欢').click()
                             time.sleep(n)
+                            print('--- good!')
                             return True
                         except:
                             return False
