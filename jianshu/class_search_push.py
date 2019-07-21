@@ -64,13 +64,14 @@ class search_push:
         self.dr.execute_script("var a = document.getElementsByClassName('v-select-options-item');a[2].click();")
         time.sleep(n)
         print('--- 成功筛选')
-
         # ----------翻页+收录--------------------
         # 遇到过搜索为0的情况
         try:
-            for c in range(3):
+            for c in range(1):
+                # 滚屏到底下
+                self.dr.execute_script("window.scrollTo(0, document.body.scrollHeight);")
                 # --- 打印信息
-                # print('--- fresh', c)
+                print('--- fanye', c)
                 # ------------------收录文章------------------------
                 self.dr = class_article.article(num_zhuanti=self.num_zhuanti,
                                                 dr=self.dr,

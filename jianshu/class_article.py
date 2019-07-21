@@ -34,7 +34,7 @@ class article:
 
     def run(self):
 
-        n = 2
+        n = 3
 
         # def num():
         #     return random.randint(2, 10)
@@ -56,7 +56,7 @@ class article:
             m = self.flag_counts
         # 依次打开特定的页面
         for i in range(m):
-            # print(i)
+            print('title:', i, '/', m)
             # 确认新页面的打开方式是新开选项卡
             if titles[i].get_attribute('target') == '_blank':
                 # =============执行启动===============
@@ -68,6 +68,7 @@ class article:
                 # print(windows)
                 # 切换到新页面，确定第几个（重要！！！)
                 self.dr.switch_to.window(windows[len(windows) - 1])
+                time.sleep(n)
                 # =============执行关注功能=============
                 if self.follow:
                     try:
@@ -78,13 +79,36 @@ class article:
                         pass
                 # =============执行点赞功能=============
                 if self.dianzan:
-                    try:
-                        # self.dr.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-                        self.dr.find_element_by_link_text('喜欢').click()
+                    # try:
+                    #     # self.dr.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+                    #     self.dr.find_element_by_link_text('喜欢').click()
+                    #     time.sleep(n)
+                    #     print('--- good!')
+                    # except:
+                    #     print('没有找到点赞的地方。。。')
+                    def try_click():
+                        try:
+                            self.dr.find_element_by_link_text('喜欢').click()
+                            time.sleep(n)
+                            return True
+                        except:
+                            return False
+
+                    n_while = 0
+                    n_while_max = 10
+                    result = try_click()
+
+                    while n_while < n_while_max and result == False:
+                        n_while += 1
+                        self.dr.refresh()
                         time.sleep(n)
-                        print('--- good!')
-                    except:
-                        pass
+                        result = try_click()
+
+                    if n_while == n_while_max:
+                        print('没有找到“点赞”的按钮！')
+
+
+
                 # =============执行评论功能===============
                 if self.comment > 0:
                     text_choose = random.randint(0, n_comments)

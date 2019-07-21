@@ -71,6 +71,7 @@ class follow_dianzan:
             # 查找
             for i in range(1, 11):
                 try:
+                    user_link = ''
                     path = '/html/body/div/div/div[2]/div/ul/li['+str(i)+']/div/a[1]'
                     user = self.dr.find_element_by_xpath(path)
                     user_link = user.get_attribute('href')
