@@ -34,7 +34,7 @@ class article:
 
     def run(self):
 
-        n = 3
+        n = 2
 
         # def num():
         #     return random.randint(2, 10)
