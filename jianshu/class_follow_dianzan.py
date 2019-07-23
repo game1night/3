@@ -76,7 +76,7 @@ class follow_dianzan:
                     user = self.dr.find_element_by_xpath(path)
                     user_link = user.get_attribute('href')
                     if user_link in self.user_list:
-                        print('pass', i, count, user_link)
+                        # print('pass', i, count, user_link)
                         continue
                     else:
                         user.click()
@@ -88,7 +88,7 @@ class follow_dianzan:
                             self.dr.execute_script("var a = document.getElementsByClassName('off  user-follow-button');"
                                                    "a[0].click();")
                             time.sleep(1)
-                            print('--- follow!')
+                            # print('--- follow!')
                             # 新增一项
                             self.user_list.append(user_link)
                             user_list_new = [user_link]
@@ -105,7 +105,7 @@ class follow_dianzan:
                                 self.dr.execute_script("var a = document.getElementsByClassName('off  user-follow-button');"
                                                        "a[0].click();")
                                 time.sleep(1)
-                                print('--- follow!')
+                                # print('--- follow!')
                                 # 新增一项
                                 self.user_list.append(user_link)
                                 user_list_new = [user_link]

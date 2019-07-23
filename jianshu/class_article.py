@@ -54,12 +54,14 @@ class article:
             m = len(titles)
         else:
             m = self.flag_counts
+        if m > 2:
+            print('title:', m)
         # 依次打开特定的页面
         for i in range(m):
-            print('title:', i, '/', m)
-            # 确认新页面的打开方式是新开选项卡
-            if titles[i].get_attribute('target') == '_blank':
-                try:
+            # print('title:', i, '/', m)
+            try:
+                # 确认新页面的打开方式是新开选项卡
+                if titles[i].get_attribute('target') == '_blank':
                     # =============执行启动===============
                     # 点击这个标题
                     self.dr.execute_script("var a = document.getElementsByClassName('title');a[" + str(i) + "].click();")
@@ -91,7 +93,7 @@ class article:
                             try:
                                 self.dr.find_element_by_link_text('喜欢').click()
                                 time.sleep(n)
-                                print('--- good!')
+                                # print('--- good!')
                                 return True
                             except:
                                 return False
@@ -108,9 +110,6 @@ class article:
 
                         if n_while == n_while_max:
                             print('没有找到“点赞”的按钮！')
-
-
-
                     # =============执行评论功能===============
                     if self.comment > 0:
                         text_choose = random.randint(0, n_comments)
@@ -138,7 +137,7 @@ class article:
                             for num_c_d in range(len(num_comment_dianzan)):
                                 num_comment_dianzan[num_c_d].click()
                                 time.sleep(n)
-                                print('--- dz comment')
+                                # print('--- dz comment')
                         except:
                             pass
 
@@ -153,7 +152,7 @@ class article:
                             self.dr.execute_script("var a = document.getElementsByClassName('action-btn');a[" + str(
                                 self.num_zhuanti) + "].click();")
                             time.sleep(n)
-                            print('--- push!')
+                            # print('--- push!')
                         except:
                             pass
                     # ==============执行返航================
@@ -162,7 +161,7 @@ class article:
                     # 切换回母页，确定第几个（重要！！！)
                     self.dr.switch_to.window(windows[len(windows) - 1 - 1])
                     # 打印信息
-                    print('--- ok', i, '/', m)
-                except:
-                    print('_blank，但是没有成功打开页面。')
+                    # print('--- ok', i, '/', m)
+            except:
+                print('_blank，但是没有成功打开页面。')
         return self.dr
