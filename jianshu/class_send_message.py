@@ -56,22 +56,25 @@ class send_message:
                     # 点击头像进入用户主页
                     self.dr.find_element_by_xpath(path).click()
                     time.sleep(n)
-                    # 寻找发送简信的按钮
-                    self.dr.find_element_by_link_text('发简信').click()
-                    # 输入框
-                    inbox = self.dr.find_element_by_xpath('/html/body/div/div/div[2]/div/div[3]/form/textarea')
-                    inbox.clear()
-                    inbox.send_keys(self.content)
-                    time.sleep(1)
-                    # 点击发送
-                    self.dr.find_element_by_xpath('/html/body/div/div/div[2]/div/div[3]/form/input').click()
-                    print('--- send!')
-                    time.sleep(1)
-                    # --- 返回循环列表 ---
-                    self.dr.back()
-                    time.sleep(1)
-                    self.dr.back()
-                    time.sleep(n)
+                    try:
+                        # 寻找发送简信的按钮
+                        self.dr.find_element_by_link_text('发简信').click()
+                        # 输入框
+                        inbox = self.dr.find_element_by_xpath('/html/body/div/div/div[2]/div/div[3]/form/textarea')
+                        inbox.clear()
+                        inbox.send_keys(self.content)
+                        time.sleep(1)
+                        # 点击发送
+                        self.dr.find_element_by_xpath('/html/body/div/div/div[2]/div/div[3]/form/input').click()
+                        print('--- send!')
+                        time.sleep(1)
+                        # --- 返回循环列表 ---
+                        self.dr.back()
+                        time.sleep(1)
+                    except:
+                        print('没有发送成功')
+                        self.dr.back()
+                        time.sleep(n)
                 except:
                     print('主页进入失败')
             except:
