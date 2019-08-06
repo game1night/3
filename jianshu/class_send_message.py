@@ -71,8 +71,10 @@ class send_message:
                         # --- 返回循环列表 ---
                         self.dr.back()
                         time.sleep(1)
+                        self.dr.back()
+                        time.sleep(1)
                     except:
-                        print('没有发送成功')
+                        print('没有找到发送')
                         self.dr.back()
                         time.sleep(n)
                 except:
