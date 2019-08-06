@@ -67,9 +67,10 @@ class search_push:
         # ----------翻页+收录--------------------
         # 遇到过搜索为0的情况
         try:
-            for c in range(1):
+            for c in range(10):
                 # 滚屏到底下
                 self.dr.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+                time.sleep(1)
                 # --- 打印信息
                 # print('--- fanye', c)
                 # ------------------收录文章------------------------

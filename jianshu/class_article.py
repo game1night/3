@@ -34,12 +34,12 @@ class article:
 
     def run(self):
 
-        n = 2
+        # n = 2
 
-        # def num():
-        #     return random.randint(2, 10)
-        #
-        # n1 = num()
+        def num():
+            return random.randint(2, 10)
+
+        n = num()
 
         comments = dict_comment.dict_comment().run()
         n_comments = len(comments.keys())
