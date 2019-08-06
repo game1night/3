@@ -69,6 +69,7 @@ class send_message:
                     time.sleep(1)
                     # --- 返回循环列表 ---
                     self.dr.back()
+                    time.sleep(1)
                     self.dr.back()
                     time.sleep(n)
                 except:
