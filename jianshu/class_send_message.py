@@ -37,7 +37,7 @@ class send_message:
                         # print(j)
                         if j < 5:
                             self.dr.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-                            time.sleep(n)
+                            time.sleep(j)
                         elif j < 10:
                             self.dr.execute_script("window.scrollTo(0, document.body.scrollHeight);")
                             time.sleep(1)
