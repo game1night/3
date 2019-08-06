@@ -74,7 +74,7 @@ class send_message:
                 except:
                     print('主页进入失败')
                     # --- 返回循环列表 ---
-                    self.dr.back()
+                    # self.dr.back()
             except:
                 print('没成功')
 
