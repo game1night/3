@@ -50,6 +50,8 @@ class article:
         # print(windows)
         # 确定当前页面的title数量
         titles = self.dr.find_elements_by_class_name("title")
+        if len(titles) == 0:
+            print('no title found')
         if self.flag_counts > 4:
             m = len(titles)
         else:
