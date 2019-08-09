@@ -76,7 +76,7 @@ class follow_dianzan:
                     user = self.dr.find_element_by_xpath(path)
                     user_link = user.get_attribute('href')
                     if user_link in self.user_list:
-                        # print('pass', i, count, user_link)
+                        print('pass', i, count, user_link)
                         continue
                     else:
                         user.click()
@@ -124,7 +124,7 @@ class follow_dianzan:
 
 
                 except:
-                    pass
+                    print('nothing happen', i)
 
         print('关注那些给我点赞的 done! 正在返航。。。')
 
