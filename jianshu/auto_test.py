@@ -8,6 +8,7 @@ Created on 2019/7/9 12:17
 
 # 导入类
 import time
+import random
 import class_login_js
 import class_hot_push
 import class_search_push
@@ -22,7 +23,7 @@ def show_windows(dr='dr'):
     n = 2
     windows = dr.window_handles
     time.sleep(n)
-    print(windows)
+    # print(windows)
 
 
 # --------关注点赞的--------
@@ -44,19 +45,19 @@ def fun2(dr):
                                          counts=2, dianzan=1,
                                          follow=0, num_followers=750,
                                          comment=0, comment_dianzan=0,
-                                         push=1, num_zhuanti=0
+                                         push=0, num_zhuanti=0
                                          ).run()
 
 
 # --------搜索收录---------
-def fun3(dr, list):
+def fun3(dr, list, push=1, counts=10):
     show_windows(dr)
     print(list)
     return class_search_push.search_push(dr=dr,
-                                         counts=10, dianzan=1,
+                                         counts=counts, dianzan=1,
                                          follow=0,
-                                         comment=0, comment_dianzan=1,
-                                         push=1, key=list[0], num_zhuanti=list[1]
+                                         comment=0, comment_dianzan=0,
+                                         push=push, key=list[0], num_zhuanti=list[1]
                                          ).run()
 
 
@@ -66,8 +67,8 @@ def fun4(dr, num=10):
     return class_hot_push.hot_push(dr=dr,
                                    counts=num, dianzan=1,
                                    follow=0,
-                                   comment=0, comment_dianzan=1,
-                                   push=1, num_zhuanti=0
+                                   comment=0, comment_dianzan=0,
+                                   push=0, num_zhuanti=0
                                    ).run()
 
 
@@ -80,39 +81,22 @@ def fun5(dr, quick, num, content=''):
                                            content=content
                                            ).run()
 
-
 if __name__ == '__main__':
     start_time = time.time()
-
-    # --------登陆成功--------
-    dr = class_login_js.login_js(headless=False, auto_input=False,
-                                 account='',
-                                 password='',
-                                 ).run()
-    show_windows(dr)
-    s_time = time.time()
+    dr = class_login_js.login_js(headless=False, auto_input=True, account='', password='').run()
     # ==================================================================================================================
-
-    dr = fun0(dr, num=100)  # 回粉-回点赞
-    dr = fun2(dr)  # 留粉-点赞
-    dr = fun3(dr, ['素描心得', 1])  # 吸粉-搜索-收录入专题
-    dr = fun3(dr, ['游戏化', 2])
-    dr = fun3(dr, ['同桌', 4])
-    dr = fun4(dr, num=10)  # 吸粉-首页推荐-点赞
-
-    for i in range(3):
-        dr = fun0(dr, num=10)  # 回粉-回点赞
-        dr = fun2(dr)  # 留粉-点赞
-        dr = fun4(dr, num=20)  # 吸粉-首页推荐-点赞
-
-
-
-    # dr = fun5(dr, quick=1, num=700, content='友友你好')     # 留粉-私信
+#TODO
+    while 1:
+        try:
+            # dr = fun5(dr, quick=1, num=900, content='')     # 留粉-私信
+            dr = fun0(dr, num=100)  # 回粉-回点赞
+            dr = fun2(dr)  # 留粉-点赞
+            dr = fun4(dr, num=10)  # 吸粉-首页推荐-点赞
+        except:
+            dr.get('https://www.jianshu.com/')
+            print('ohhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh!!!')
 
     # ==================================================================================================================
-    e_time = time.time()
-    print('time: {}'.format(e_time - s_time))
-
     # ------- 结束导航 ----------
     dr.quit()
     print('okokok')
