@@ -81,11 +81,14 @@ def fun5(dr, quick, num, content=''):
                                            content=content
                                            ).run()
 
+
 if __name__ == '__main__':
     start_time = time.time()
-    dr = class_login_js.login_js(headless=False, auto_input=True, account='', password='').run()
+    dr = class_login_js.login_js(headless=False, auto_input=True,
+                                 account='',
+                                 password='').run()
     # ==================================================================================================================
-#TODO
+    # TODO
     while 1:
         try:
             # dr = fun5(dr, quick=1, num=900, content='')     # 留粉-私信
