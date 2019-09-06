@@ -37,7 +37,7 @@ class article:
         # n = 2
 
         def num():
-            return random.randint(2, 10)
+            return random.randint(2, 4)
 
         n = num()
 
