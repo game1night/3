@@ -9,6 +9,8 @@ Created on 2019/10/30 16:32
 import os
 from selenium import webdriver
 import time
+import pandas as pd
+import numpy as np
 
 
 def cd(n):
@@ -26,10 +28,18 @@ def run(path, url, info, user_list, page_count, fresh_count):
     # 启动汽车，前往各个站点
     # 首页半自动登陆，需手动输入验证码并点击提交
     signin(dr, url, info)
-    # 关注那些给予喜欢和赞的朋友
-    like_count = follow(dr, url, user_list, page_count)
-    # 给关注的朋友点赞
-    like(dr, url, like_count)
+
+    flag = 2
+
+    if flag == 1:
+        # 关注那些给予喜欢和赞的朋友
+        like_count = follow(dr, url, user_list, page_count)
+        # 给关注的朋友点赞
+        like(dr, url, like_count)
+    if flag == 2:
+        like_count = len(user_list)
+        # 给关注的朋友点赞
+        like(dr, url, like_count)
     # 给首页的文章点赞
     find(dr, url, fresh_count)
     return 0
@@ -79,7 +89,12 @@ def follow(dr, url, user_list, page_count):
                     user.click()
                     cd(3)
                     try:
-                        dr.find_element_by_xpath('/html/body/div[1]/div/div[1]/div[1]/button').click()
+                        guanzhu_item = dr.find_element_by_xpath('/html/body/div[1]/div/div[1]/div[1]/button/span')
+                        guanzhu_status = guanzhu_item.get_attribute('textContent')
+                        if guanzhu_status == '关注':
+                            dr.find_element_by_xpath('/html/body/div[1]/div/div[1]/div[1]/button').click()
+                        elif guanzhu_status == '已关注':
+                            print('已关')
                         cd(2)
                         # print('-关注成功')
                         uu(user_link)
@@ -123,48 +138,82 @@ def like(dr, url, a_len):
     # 捕捉有更新的对象
     # dr.execute_script("var q=document.getElementsByClassName('js-subscription-list')[0].scrollTop = 10000")
     like_count = 0
+    like_count_ready = 0
     for i in range(a_len):
         try:
             # 查找视野内目标
-            dr.find_element_by_xpath('/html/body/div/div/div[1]/ul[2]/li[' + str(2 + i) + ']/a/span').click()
-            cd(5)
-            # 点击文章
-            dr.find_element_by_xpath('/html/body/div/div/div[2]/div/div/ul[2]/div[1]/li/div/a').click()
-            # 操作文章
-            like_article(dr)
-            like_count += 1
+            like_user_item = dr.find_element_by_xpath('/html/body/div/div/div[1]/ul[2]/li[{}]/a/div[2]'.format(str(2 + i)))
+            # 定位到视野中
+            dr.execute_script("arguments[0].scrollIntoView();", like_user_item)
+            # 提示的更新数量（这个不准）
+            like_user_updates_item = dr.find_element_by_xpath(
+                '/html/body/div/div/div[1]/ul[2]/li[{}]/a/span'.format(str(2 + i)))
+            like_user_updates = like_user_updates_item.get_attribute('textContent')
+            like_user_updates = str(like_user_updates).strip()
+            like_user_updates = int(like_user_updates)
+            # 点击该用户
+            like_user_item.click()
+            # 对有更新的文章进行查看
+            if like_user_updates > 0:
+                cd(3)
+                # 点击文章
+                dr.find_element_by_xpath('/html/body/div/div/div[2]/div/div/ul[2]/div[1]/li/div/a').click()
+                # 操作文章
+                like_article(dr)
+                like_count += 1
+            like_count_ready = 0
         except:
-            # 排头兵滚动条法
-            dr.find_element_by_xpath('/html/body/div/div/div[1]/ul[2]/li[' + str(2 + i) + ']').click()
             cd(1)
+            like_count_ready += 1
+        if like_count_ready > 10:
+            break
         print(i, '/', like_count, '/', a_len)
+
     return 0
 
 
 def like_article(dr):
+    # 点怪哦的次数
+    n = 0
     # 切换导航
     cd(1)
-    dr.switch_to_window(dr.window_handles[1])
-    cd(4)
+    dr.switch_to.window(dr.window_handles[1])
+    cd(1)
     # 评阅文章
     try:
-        dr.find_element_by_xpath('//*[@id="__next"]/footer/div[1]/div[1]/div[2]/div[2]').click()
-        cd(1)
+        cd(np.random.randint(2, 6))
+        article_like_item = dr.find_element_by_xpath('//*[@id="__next"]/footer/div[1]/div/div[2]/div[2]')
+        if article_like_item.get_attribute('class') == '_3nj4GN _3oieia':
+            n += 1
+            print('已赞')
+        else:
+            dr.find_element_by_xpath('//*[@id="__next"]/footer/div[1]/div[1]/div[2]/div[2]').click()
+            cd(1)
+            if article_like_item.get_attribute('class') != '_3nj4GN _3oieia':
+                n += 1
+                print('点怪哦')
     except:
         print('no button')
+    # 收录文章
+    # shou_article(dr)
     # 返航
     dr.close()
-    dr.switch_to_window(dr.window_handles[0])
-    return 0
+    dr.switch_to.window(dr.window_handles[0])
+    return n
 
 
 def find(dr, url, fresh_count):
+    # 点怪哦次数
+    n = 0
+    # 前往主页
     dr.get(url[3])
     cd(3)
     for fresh in range(fresh_count):
-        print('这是第{}次刷新'.format(fresh))
-        # dr.execute_script("var q=document.documentElement.scrollTop=10000")
-        # cd(3)
+        print('这是第{}次刷新, {}'.format(fresh, time.strftime('%Y-%m-%d %H:%M')))
+        dr.execute_script("var q=document.documentElement.scrollTop=0")
+        cd(5)
+        # if fresh % 10 == 9:
+        #     cd(10)
         # 获取文单
         article_list = dr.find_elements_by_class_name('ic-list-comments')
         print(len(article_list))
@@ -172,10 +221,29 @@ def find(dr, url, fresh_count):
             # 点击文章
             article_list[i].click()
             # 操作文章
-            like_article(dr)
+            n += like_article(dr)
+        # 点不动了就撤
+        if n > 10:
+            break
         # 刷新页面
         dr.refresh()
     return 0
+
+
+def shou_article(dr):
+    try:
+        dr.find_element_by_xpath('//*[@id="__next"]/footer/div[1]/div[1]/div[2]/div[3]').click()
+        cd(1)
+        dr.find_element_by_xpath('//*[@id="__next"]/footer/div[1]/div[2]/div/div/ul/li[2]').click()
+        cd(2)
+        try:
+            dr.find_element_by_xpath('/html/body/div[3]/div/div[2]/div/div[2]/div[2]/div/div[2]/div[1]/button').click()
+        except:
+            dr.find_element_by_xpath('/html/body/div[2]/div/div[2]/div/div[2]/div[2]/div/div[2]/div[1]/button').click()
+        cd(2)
+    except:
+        print('no shou')
+    return None
 
 
 if __name__ == '__main__':

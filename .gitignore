@@ -1,6 +1,9 @@
 data/
 my_test.py
 
+# pycharm
+.idea
+
 #===========================
 
 # Byte-compiled / optimized / DLL files
