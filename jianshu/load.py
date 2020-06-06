@@ -19,7 +19,7 @@ def cd(n):
         # print(i)
 
 
-def run(path, url, info, user_list, page_count, fresh_count):
+def run(path, url, info, user_list, page_count, fresh_count, flag=3):
     # 设置驱动
     options = webdriver.ChromeOptions()
     # options.add_argument('headless')
@@ -29,7 +29,7 @@ def run(path, url, info, user_list, page_count, fresh_count):
     # 首页半自动登陆，需手动输入验证码并点击提交
     signin(dr, url, info)
 
-    flag = 2
+    # flag = 2
 
     if flag == 1:
         # 关注那些给予喜欢和赞的朋友
@@ -142,7 +142,8 @@ def like(dr, url, a_len):
     for i in range(a_len):
         try:
             # 查找视野内目标
-            like_user_item = dr.find_element_by_xpath('/html/body/div/div/div[1]/ul[2]/li[{}]/a/div[2]'.format(str(2 + i)))
+            like_user_item = dr.find_element_by_xpath(
+                '/html/body/div/div/div[1]/ul[2]/li[{}]/a/div[2]'.format(str(2 + i)))
             # 定位到视野中
             dr.execute_script("arguments[0].scrollIntoView();", like_user_item)
             # 提示的更新数量（这个不准）
@@ -181,7 +182,7 @@ def like_article(dr):
     cd(1)
     # 评阅文章
     try:
-        cd(np.random.randint(2, 6))
+        cd(np.random.randint(5, 10))
         article_like_item = dr.find_element_by_xpath('//*[@id="__next"]/footer/div[1]/div/div[2]/div[2]')
         if article_like_item.get_attribute('class') == '_3nj4GN _3oieia':
             n += 1
@@ -209,9 +210,10 @@ def find(dr, url, fresh_count):
     dr.get(url[3])
     cd(3)
     for fresh in range(fresh_count):
-        print('这是第{}次刷新, {}'.format(fresh, time.strftime('%Y-%m-%d %H:%M')))
+        cd(1)
         dr.execute_script("var q=document.documentElement.scrollTop=0")
-        cd(5)
+        cd(2)
+        print('这是第{}次刷新, {}'.format(fresh, time.strftime('%Y-%m-%d %H:%M')))
         # if fresh % 10 == 9:
         #     cd(10)
         # 获取文单
@@ -246,7 +248,7 @@ def shou_article(dr):
     return None
 
 
-if __name__ == '__main__':
+def main(flag):
     # 记时开始
     s_time = time.time()
     # 驱动地址
@@ -261,14 +263,21 @@ if __name__ == '__main__':
     ]
     # 关键信息
     info = {
-        'name': '',
-        'password': ''
+        'name': '',  # todo
+        'password': '',  # todo
     }
     # 初始用户列表
-    with open('user_list.txt', 'r', encoding='utf-8-sig') as f:
+    with open(os.path.join(path, 'jianshu', 'user_list.txt'), 'r', encoding='utf-8-sig') as f:
         user_list = f.read().splitlines()
     # 运行主程序
-    run(path, url, info, user_list, page_count=20, fresh_count=10)
+    run(path, url, info, user_list, page_count=20, fresh_count=20, flag=flag)
     # 记时结束
     e_time = time.time()
     print('总耗时{}'.format(e_time - s_time))
+
+    return None
+
+
+if __name__ == '__main__':
+    # flag: 1, 2, 3
+    main(flag=2)
